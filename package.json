@@ -1,0 +1,16 @@
+{
+  "name": "spot-maps",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "vite --host",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "vite": "^4.0.4"
+  },
+  "dependencies": {
+    "ol": "latest"
+  }
+}
