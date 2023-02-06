@@ -81,11 +81,11 @@ class SpotMap {
     }
 
     addLayers(layers) {
-        console.debug("adding layers")
-        let baseLayerGroup = new LayerGroup({
-            layers: [...layers],
-        });
-        this.map.addLayer(baseLayerGroup);
+        console.debug(`adding layers ${layers}`)
+        layers.forEach(layer => {
+            console.log(layer)
+            this.map.addLayer(layer);
+        })
     }
 
     addMarker(coords) {
@@ -101,11 +101,12 @@ class SpotMap {
         });
     }
 
-    toggleMapLayer(mapId) {
+    toggleMapLayer(mapTitle) {
         this.map.getLayers().forEach(layer => {
-            console.log(layer)
-            if (typeof layer.get('id') !== 'undefined') {
-                layer.setVisible(layer.get('id') === mapId ? true : false);
+            console.log(layer.get('title'), mapTitle);
+            layer.setVisible(false)
+            if (layer.get('title') === mapTitle) {
+                layer.setVisible(true);
             }
         });
     }
