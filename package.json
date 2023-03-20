@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "typescript": "^4.9.5",
-    "vite": "^4.0.4"
+    "vite": "^4.2.0"
   },
   "dependencies": {
     "ol": "latest"
