@@ -10,19 +10,43 @@
 </head>
 
 <body>
+  <div class="grid-container">
+    <div class="grid-1">
+      <div class="sidebar">
+        <h2>Base Layers</h2>
+        <input type="radio" name="baseLayerRadioButton" value="OSMStandard">OSM Standard<br>
+        <input type="radio" name="baseLayerRadioButton" value="ArcgisImagery" checked>ArcgisImagery<br>
+        <input type="radio" name="baseLayerRadioButton" value="ArcgisTopograph">ArcgisTopograph<br>
+        <input type="radio" name="baseLayerRadioButton" value="ArcgisStreetMap">ArcgisStreetMap<br>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div id="map" class="map"></div>
+    </div>
+  </div>
 
-  <style>
-    .rotate-north {
-      top: 65px;
-      left: .5em;
-    }
-
-    .ol-touch .rotate-north {
-      top: 80px;
-    }
-  </style>
-  <div id="map" class="map"></div>
   <script type="module" src="./main.js"></script>
 </body>
+
+<style>
+  * {
+    box-sizing: border-box
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 20vw 80vw;
+    grid-template-rows: 100vh;
+  }
+
+  .sidebar {
+    margin-left: 15px;
+  }
+</style>
 
 </html>

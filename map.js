@@ -7,57 +7,40 @@ import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import Icon from "ol/style/Icon";
-import { Control, defaults as defaultControls } from 'ol/control.js';
+import { openStreetMapStandard, arcgisTopograph, arcgisImagery, arcgisStreetMap } from "./layers.js"
 
-class RotateNorthControl extends Control {
-    /**
-     * @param {Object} [opt_options] Control options.
-     */
-    constructor(opt_options) {
-        const options = opt_options || {};
 
-        const button = document.createElement('button');
-        button.innerHTML = 'N';
+// class RotateNorthControl extends Control {
+//     /**
+//      * @param {Object} [opt_options] Control options.
+//      */
+//     constructor(opt_options) {
+//         const options = opt_options || {};
 
-        const element = document.createElement('div');
-        element.className = 'rotate-north ol-unselectable ol-control';
-        element.appendChild(button);
+//         const button = document.createElement('button');
+//         button.innerHTML = 'N';
 
-        super({
-            element: element,
-            target: "map",
-        });
+//         const element = document.createElement('div');
+//         element.className = 'rotate-north ol-unselectable ol-control';
+//         element.appendChild(button);
 
-        button.addEventListener('click', this.handleRotateNorth.bind(this), false);
-    }
+//         super({
+//             element: element,
+//             target: "map",
+//         });
 
-    handleRotateNorth() {
-        baseLayerGroup.getLayers().forEach(function (layer) {
-            layer.setVisible(layer.get("title") === target.value);
-        });
-    }
-}
+//         button.addEventListener('click', this.handleRotateNorth.bind(this), false);
+//     }
 
+//     handleRotateNorth() {
+//         baseLayerGroup.getLayers().forEach(function (layer) {
+//             layer.setVisible(layer.get("title") === target.value);
+//         });
+//     }
+// }
 const defaultCenter = [39.1189, -94.5207];
 
-
-const defaultView = new View({
-    center: defaultCenter,
-    zoom: 2,
-    // maxZoom: 10,
-    // minZoom: 2,
-    rotation: 0, // in radians
-});
-
-
-
-const defaultMap = new Map({
-    controls: defaultControls().extend([new RotateNorthControl()]),
-    target: "map",
-    view: defaultView,
-});
-
-const defaultMarkerLayer = new Vector({
+let defaultMarkerLayer = new Vector({
     source: new VectorSource(),
     style: new Style({
         image: new Icon({
@@ -65,54 +48,94 @@ const defaultMarkerLayer = new Vector({
             src: "https://www.weather.gov/spot/images/monitor/O_C_Marker20x34.png",
         }),
     }),
+    // zIndex: 0,
+    title: 'MarkerLayer',
+    visible: true,
+    opacity: 100
 });
 
+// Layer Group
+const baseLayerGroup = new LayerGroup({
+    layers: [
+        openStreetMapStandard, arcgisImagery, arcgisStreetMap, arcgisTopograph]
+})
 
+
+const defaultMap = new Map({
+    view: new View({
+        center: defaultCenter,
+        zoom: 2,
+        minZoom: 0,
+        maxZoom: 10
+    }),
+    target: "map"
+});
 
 class SpotMap {
-    constructor(view = null, map = null, layers = [], center = null) {
-        this.center = center || defaultCenter;
-        this.view = view || defaultView;
-        this.map = map || defaultMap;
-        this.map.controls = defaultControls().extend([new RotateNorthControl()]);
+    constructor() {
+        this.map = defaultMap;
+        this.baseLayerGroup = baseLayerGroup;
+        this.map.addLayer(this.baseLayerGroup);
         this.markerLayer = defaultMarkerLayer;
-        this.addLayers([...layers, this.markerLayer])
-        this.addEvents(this.markerLayer)
+        this.map.addLayer(defaultMarkerLayer);
+        this.controls = document.querySelectorAll('.sidebar > input[type=radio]')
+        this._setupLayerControls();
+        this.addEvents(this.map.layers);
     }
 
-    addLayers(layers) {
-        console.debug(`adding layers ${layers}`)
-        layers.forEach(layer => {
-            console.log(layer)
-            this.map.addLayer(layer);
+    _setupLayerControls = () => {
+        this.controls.forEach(control => {
+            control.addEventListener('change', y => {
+                this.toggleMapLayer(y.target.value);
+            })
         })
     }
 
-    addMarker(coords) {
+    addMarker = (coords) => {
         console.debug(`adding marker at ${coords}`);
         let marker = new Feature(new Point(coords));
         this.markerLayer.getSource().addFeature(marker);
     }
 
-    addEvents() {
+    addEvents = () => {
         console.debug("adding events")
         this.map.on("click", e => {
             this.addMarker(e.coordinate);
         });
     }
 
-    toggleMapLayer(mapTitle) {
-        this.map.getLayers().forEach(layer => {
-            console.log(layer.get('title'), mapTitle);
-            layer.setVisible(false)
-            if (layer.get('title') === mapTitle) {
-                layer.setVisible(true);
+    toggleMapLayer = (mapTitle) => {
+        console.debug(`toggling layer ${mapTitle}`)
+        this.map.getAllLayers().forEach(layer => {
+            const title = layer.get('title');
+            if (title !== 'MarkerLayer') {
+                title === mapTitle ? layer.setVisible(true) : layer.setVisible(false);
             }
         });
     }
 
+    zoom = (value) => {
+        this.map.setView(new View({
+            center: [0, 0],
+            zoom: value
+        }));
+    }
+
+    centerMap = (lat, lon) => {
+        this.map.setView(new View({
+            center: [lat, lon],
+            zoom: 2
+        }));
+    }
+
+    reset = () => {
+        this.map.setView(this.view)
+    }
+
 
 }
+
+
 
 export { SpotMap }
 
