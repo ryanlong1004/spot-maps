@@ -9,35 +9,6 @@ import Point from "ol/geom/Point";
 import Icon from "ol/style/Icon";
 import { openStreetMapStandard, arcgisTopograph, arcgisImagery, arcgisStreetMap } from "./layers.js"
 
-
-// class RotateNorthControl extends Control {
-//     /**
-//      * @param {Object} [opt_options] Control options.
-//      */
-//     constructor(opt_options) {
-//         const options = opt_options || {};
-
-//         const button = document.createElement('button');
-//         button.innerHTML = 'N';
-
-//         const element = document.createElement('div');
-//         element.className = 'rotate-north ol-unselectable ol-control';
-//         element.appendChild(button);
-
-//         super({
-//             element: element,
-//             target: "map",
-//         });
-
-//         button.addEventListener('click', this.handleRotateNorth.bind(this), false);
-//     }
-
-//     handleRotateNorth() {
-//         baseLayerGroup.getLayers().forEach(function (layer) {
-//             layer.setVisible(layer.get("title") === target.value);
-//         });
-//     }
-// }
 const defaultCenter = [39.1189, -94.5207];
 
 let defaultMarkerLayer = new Vector({
@@ -48,16 +19,29 @@ let defaultMarkerLayer = new Vector({
             src: "https://www.weather.gov/spot/images/monitor/O_C_Marker20x34.png",
         }),
     }),
-    // zIndex: 0,
     title: 'MarkerLayer',
     visible: true,
     opacity: 100
 });
 
+let fireLayer = new Vector({
+    source: new VectorSource(),
+    style: new Style({
+        image: new Icon({
+            anchor: [0.5, 1],
+            src: "assetts/fire-png-698.png",
+        }),
+    }),
+    title: 'FireLayer',
+    visible: true,
+    opacity: 100
+});
+
 // Layer Group
-const baseLayerGroup = new LayerGroup({
+const defaultBaseLayerGroup = new LayerGroup({
     layers: [
-        openStreetMapStandard, arcgisImagery, arcgisStreetMap, arcgisTopograph]
+        openStreetMapStandard, arcgisImagery, arcgisStreetMap, arcgisTopograph, fireLayer
+    ]
 })
 
 
@@ -74,16 +58,15 @@ const defaultMap = new Map({
 class SpotMap {
     constructor() {
         this.map = defaultMap;
-        this.baseLayerGroup = baseLayerGroup;
+        this.baseLayerGroup = defaultBaseLayerGroup;
         this.map.addLayer(this.baseLayerGroup);
-        this.markerLayer = defaultMarkerLayer;
-        this.map.addLayer(defaultMarkerLayer);
         this.controls = document.querySelectorAll('.sidebar > input[type=radio]')
         this._setupLayerControls();
         this.addEvents(this.map.layers);
     }
 
     _setupLayerControls = () => {
+        console.debug("adding layer toggling controls")
         this.controls.forEach(control => {
             control.addEventListener('change', y => {
                 this.toggleMapLayer(y.target.value);
@@ -94,7 +77,7 @@ class SpotMap {
     addMarker = (coords) => {
         console.debug(`adding marker at ${coords}`);
         let marker = new Feature(new Point(coords));
-        this.markerLayer.getSource().addFeature(marker);
+        fireLayer.getSource().addFeature(marker);
     }
 
     addEvents = () => {
@@ -113,26 +96,6 @@ class SpotMap {
             }
         });
     }
-
-    zoom = (value) => {
-        this.map.setView(new View({
-            center: [0, 0],
-            zoom: value
-        }));
-    }
-
-    centerMap = (lat, lon) => {
-        this.map.setView(new View({
-            center: [lat, lon],
-            zoom: 2
-        }));
-    }
-
-    reset = () => {
-        this.map.setView(this.view)
-    }
-
-
 }
 
 
