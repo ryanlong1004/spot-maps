@@ -1,17 +1,18 @@
 import "./style.css";
 import { Map, View } from "ol";
-import { Circle, Fill, Stroke, Style } from 'ol/style.js';
 import LayerGroup from "ol/layer/Group";
 import Vector from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
-import Icon from "ol/style/Icon";
 import { fromLonLat } from 'ol/proj'
 import { openStreetMapStandard, arcgisTopograph, arcgisImagery, arcgisStreetMap } from "./layers.js"
 import { circleRed, getCircle } from "./mapStyles";
+import { Control, defaults as defaultControls } from 'ol/control.js';
+import { LayerControl } from "./controls";
 
 const defaultCenter = [39.1189, -94.5207];
+
 
 let defaultMarkerLayer = new Vector({
     source: new VectorSource(),
@@ -36,23 +37,32 @@ const defaultBaseLayerGroup = new LayerGroup({
     ]
 })
 
+const layerControls = [
+    new LayerControl({ name: 'Standard', title: 'OSMStandard' }),
+    new LayerControl({ name: 'Imagery', title: 'ArcgisImagery' }),
+    new LayerControl({ name: 'StreetMap', title: 'ArcgisStreetMap' }),
+    new LayerControl({ name: 'Topograph', title: 'ArcgisTopograph' })
+]
 
 const defaultMap = new Map({
+    controls: defaultControls().extend(layerControls),
+    layers: defaultBaseLayerGroup,
     view: new View({
         center: defaultCenter,
         zoom: 2,
         minZoom: 0,
-        maxZoom: 10
+        maxZoom: 10,
     }),
     target: "map"
 });
+
+
+
 
 class SpotMap {
     constructor(data) {
         this.data = data;
         this.map = defaultMap;
-        this.baseLayerGroup = defaultBaseLayerGroup;
-        this.map.addLayer(this.baseLayerGroup);
         this.controls = document.querySelectorAll('.sidebar > input[type=radio]')
         this._setupLayerControls()
         this.addEvents(this.map.layers)
@@ -64,7 +74,7 @@ class SpotMap {
      * topographic layers.
      */
     _setupLayerControls = () => {
-        console.debug("adding layer toggling controls")
+        // console.debug("adding layer toggling controls")
         this.controls.forEach(control => {
             control.addEventListener('change', y => {
                 this.toggleMapLayer(y.target.value);
@@ -83,7 +93,7 @@ class SpotMap {
     }
 
     addMarker = (coords) => {
-        console.debug(`adding marker at ${coords}`)
+        // console.debug(`adding marker at ${coords}`)
         defaultMarkerLayer.getSource().addFeature(new Feature(new Point(coords)))
     }
 

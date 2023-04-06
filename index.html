@@ -11,18 +11,7 @@
 
 <body>
   <div class="grid-container">
-    <div class="grid-1">
-      <div class="sidebar">
-        <h2>Base Layers</h2>
-        <input type="radio" name="baseLayerRadioButton" value="OSMStandard">OSM Standard<br>
-        <input type="radio" name="baseLayerRadioButton" value="ArcgisImagery" checked>ArcgisImagery<br>
-        <input type="radio" name="baseLayerRadioButton" value="ArcgisTopograph">ArcgisTopograph<br>
-        <input type="radio" name="baseLayerRadioButton" value="ArcgisStreetMap">ArcgisStreetMap<br>
-      </div>
-    </div>
-    <div class="grid-2">
-      <div id="map" class="map"></div>
-    </div>
+    <div id="map" class="map"></div>
   </div>
 
   <script type="module" src="./main.js"></script>
@@ -39,13 +28,27 @@
   }
 
   .grid-container {
-    display: grid;
-    grid-template-columns: 20vw 80vw;
-    grid-template-rows: 100vh;
+    max-width: 40vw;
+    overflow: hidden;
+  }
+</style>
+
+<style>
+  .rotate-north {
+    top: 65px;
+    left: .5em;
   }
 
-  .sidebar {
-    margin-left: 15px;
+  .ol-touch .rotate-north {
+    top: 80px;
+  }
+
+  .layer-control-button {
+    min-width: 7em !important;
+    border-radius: 4px;
+    position: relative;
+    top: 15vh;
+    margin: .1em;
   }
 </style>
 
