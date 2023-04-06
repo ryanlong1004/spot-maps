@@ -63,23 +63,8 @@ class SpotMap {
     constructor(data) {
         this.data = data;
         this.map = defaultMap;
-        this.controls = document.querySelectorAll('.sidebar > input[type=radio]')
-        this._setupLayerControls()
         this.addEvents(this.map.layers)
         this.addMarkersAsLonLat(this.data.rows)
-    }
-
-    /**
-     * Adds the controls responsible for switching between
-     * topographic layers.
-     */
-    _setupLayerControls = () => {
-        // console.debug("adding layer toggling controls")
-        this.controls.forEach(control => {
-            control.addEventListener('change', y => {
-                this.toggleMapLayer(y.target.value);
-            })
-        })
     }
 
     addMarkersAsLonLat = (rows) => {
@@ -112,9 +97,6 @@ class SpotMap {
                 title === mapTitle ? layer.setVisible(true) : layer.setVisible(false);
             }
         });
-    }
-    toggleMarkerLayer = (markerTitle) => {
-        return
     }
 }
 

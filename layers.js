@@ -18,7 +18,7 @@ let arcgisImagery = new TileLayer({
         url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?appid=45ad401c-fa23-4a10-8b2f-a7ad29a3e2a0",
         attribution: 'Tiles &copy; <a href="https://www.esri.com/">ESRI</a>',
     }),
-    visible: true,
+    visible: false,
     title: "ArcgisImagery",
 });
 
@@ -34,7 +34,7 @@ let arcgisStreetMap = new TileLayer({
 
 let openStreetMapStandard = new TileLayer({
     source: new OSM(),
-    visible: false,
+    visible: true,
     title: "OSMStandard",
 });
 
