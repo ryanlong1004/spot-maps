@@ -1,5 +1,12 @@
 
 import { SpotMap } from './map'
 
-let map = new SpotMap();
+const data = fetch('./response.json').then((response) =>
+    response.json()
+).then(
+    response => {
+        let map = new SpotMap(response)
+    }
+);
 
+// 
