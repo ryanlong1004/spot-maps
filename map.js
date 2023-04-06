@@ -1,24 +1,21 @@
 import "./style.css";
 import { Map, View } from "ol";
-import Style from "ol/style/Style.js";
+import { Circle, Fill, Stroke, Style } from 'ol/style.js';
 import LayerGroup from "ol/layer/Group";
 import Vector from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import Icon from "ol/style/Icon";
+import { fromLonLat } from 'ol/proj'
 import { openStreetMapStandard, arcgisTopograph, arcgisImagery, arcgisStreetMap } from "./layers.js"
+import { circleRed, getCircle } from "./mapStyles";
 
 const defaultCenter = [39.1189, -94.5207];
 
 let defaultMarkerLayer = new Vector({
     source: new VectorSource(),
-    style: new Style({
-        image: new Icon({
-            anchor: [0.5, 1],
-            src: "https://www.weather.gov/spot/images/monitor/O_C_Marker20x34.png",
-        }),
-    }),
+    style: getCircle('red', 'black', .25, 10),
     title: 'MarkerLayer',
     visible: true,
     opacity: 100
@@ -26,12 +23,7 @@ let defaultMarkerLayer = new Vector({
 
 let fireLayer = new Vector({
     source: new VectorSource(),
-    style: new Style({
-        image: new Icon({
-            anchor: [0.5, 1],
-            src: "assetts/fire-png-698.png",
-        }),
-    }),
+    style: getCircle('red', 'gray', .5, 10),
     title: 'FireLayer',
     visible: true,
     opacity: 100
@@ -40,7 +32,7 @@ let fireLayer = new Vector({
 // Layer Group
 const defaultBaseLayerGroup = new LayerGroup({
     layers: [
-        openStreetMapStandard, arcgisImagery, arcgisStreetMap, arcgisTopograph, fireLayer
+        openStreetMapStandard, arcgisImagery, arcgisStreetMap, arcgisTopograph, defaultMarkerLayer
     ]
 })
 
@@ -56,15 +48,21 @@ const defaultMap = new Map({
 });
 
 class SpotMap {
-    constructor() {
+    constructor(data) {
+        this.data = data;
         this.map = defaultMap;
         this.baseLayerGroup = defaultBaseLayerGroup;
         this.map.addLayer(this.baseLayerGroup);
         this.controls = document.querySelectorAll('.sidebar > input[type=radio]')
-        this._setupLayerControls();
-        this.addEvents(this.map.layers);
+        this._setupLayerControls()
+        this.addEvents(this.map.layers)
+        this.addMarkersAsLonLat(this.data.rows)
     }
 
+    /**
+     * Adds the controls responsible for switching between
+     * topographic layers.
+     */
     _setupLayerControls = () => {
         console.debug("adding layer toggling controls")
         this.controls.forEach(control => {
@@ -74,16 +72,25 @@ class SpotMap {
         })
     }
 
+    addMarkersAsLonLat = (rows) => {
+        this.addMarkers(rows.map(function (item) {
+            return fromLonLat([item.lon, item.lat]);
+        }))
+    }
+
+    addMarkers = (rows) => {
+        rows.map((x) => this.addMarker(x))
+    }
+
     addMarker = (coords) => {
-        console.debug(`adding marker at ${coords}`);
-        let marker = new Feature(new Point(coords));
-        fireLayer.getSource().addFeature(marker);
+        console.debug(`adding marker at ${coords}`)
+        defaultMarkerLayer.getSource().addFeature(new Feature(new Point(coords)))
     }
 
     addEvents = () => {
         console.debug("adding events")
         this.map.on("click", e => {
-            this.addMarker(e.coordinate);
+            // this.addMarker(e.coordinate);
         });
     }
 
@@ -96,31 +103,12 @@ class SpotMap {
             }
         });
     }
+    toggleMarkerLayer = (markerTitle) => {
+        return
+    }
 }
-
-
 
 export { SpotMap }
 
 
 
-// var newCRC = 1;
-// var get_wfo = '';
-// var mcenter = toLonLat(map.getView().getCenter());
-// var mlat = mcenter[1];
-// var mlon = mcenter[0];
-// var mzoom = map.getView().getZoom();
-
-// var extent = map.getView().calculateExtent(map.getSize());
-// var bnds = transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
-
-// var ul_lat = bnds[3];
-// var ul_lon = (bnds[0] + 540) % 360 - 180; //bnds[0];
-// var lr_lat = bnds[1];
-// var lr_lon = (bnds[2] + 540) % 360 - 180;  //bnds[2];
-
-// reqtime = new Date().getTime();
-// var get_str = "ullat=" + ul_lat + "&ullon=" + ul_lon + "&lrlat=" + lr_lat + "&lrlon=" + lr_lon + "&reqtime=" + reqtime;
-// if (wfo != "") {
-//   get_str = get_str + "&wfo=" + wfo;
-// }
