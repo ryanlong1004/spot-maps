@@ -64,21 +64,25 @@ class SpotMap {
         this.data = data;
         this.map = defaultMap;
         this.addEvents(this.map.layers)
-        this.addMarkersAsLonLat(this.data.rows)
+        this.addMarkersAsLonLat(this.data.rows, getCircle('blue', 'black', .25, 10))
     }
 
-    addMarkersAsLonLat = (rows) => {
+    addMarkersAsLonLat = (rows, style) => {
         this.addMarkers(rows.map(function (item) {
             return fromLonLat([item.lon, item.lat]);
-        }))
+        }), style)
     }
 
-    addMarkers = (rows) => {
-        rows.map((x) => this.addMarker(x))
+    addMarkers = (rows, style) => {
+        rows.map((x) => this.addMarker(x, style))
     }
 
-    addMarker = (coords) => {
+    addMarker = (coords, style) => {
         // console.debug(`adding marker at ${coords}`)
+        console
+        if (style) {
+            defaultMarkerLayer.setStyle(style)
+        }
         defaultMarkerLayer.getSource().addFeature(new Feature(new Point(coords)))
     }
 
