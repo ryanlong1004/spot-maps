@@ -1,8 +1,17 @@
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 import XYZ from "ol/source/XYZ";
+import { LayerControl } from "./controls";
 
 // sourceBasePrefix: 'https://server.arcgisonline.com/ArcGIS/rest/services/',
+
+class SpotLayer {
+    constructor(name, layer) {
+        this.name = name
+        this.layer = layer
+        this.control = new LayerControl(name, layer)
+    }
+}
 
 let arcgisTopograph = new TileLayer({
     source: new XYZ({
@@ -38,4 +47,4 @@ let openStreetMapStandard = new TileLayer({
     title: "OSMStandard",
 });
 
-export { openStreetMapStandard, arcgisImagery, arcgisTopograph, arcgisStreetMap }
+export { SpotLayer, openStreetMapStandard, arcgisImagery, arcgisTopograph, arcgisStreetMap }

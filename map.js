@@ -1,15 +1,14 @@
 import "./style.css";
 import { Map, View } from "ol";
-import LayerGroup from "ol/layer/Group";
 import Vector from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { fromLonLat } from 'ol/proj'
-import { openStreetMapStandard, arcgisTopograph, arcgisImagery, arcgisStreetMap } from "./layers.js"
 import { circleRed, getCircle } from "./mapStyles";
 import { Control, defaults as defaultControls } from 'ol/control.js';
 import { LayerControl } from "./controls";
+
 
 const defaultCenter = [39.1189, -94.5207];
 
@@ -22,49 +21,13 @@ let defaultMarkerLayer = new Vector({
     opacity: 100
 });
 
-let fireLayer = new Vector({
-    source: new VectorSource(),
-    style: getCircle('red', 'gray', .5, 10),
-    title: 'FireLayer',
-    visible: true,
-    opacity: 100
-});
-
-// Layer Group
-const defaultBaseLayerGroup = new LayerGroup({
-    layers: [
-        openStreetMapStandard, arcgisImagery, arcgisStreetMap, arcgisTopograph, defaultMarkerLayer
-    ]
-})
-
-const layerControls = [
-    new LayerControl({ name: 'Standard', title: 'OSMStandard' }),
-    new LayerControl({ name: 'Imagery', title: 'ArcgisImagery' }),
-    new LayerControl({ name: 'StreetMap', title: 'ArcgisStreetMap' }),
-    new LayerControl({ name: 'Topograph', title: 'ArcgisTopograph' }),
-]
-
-const defaultMap = new Map({
-    controls: defaultControls().extend(layerControls),
-    layers: defaultBaseLayerGroup,
-    view: new View({
-        center: defaultCenter,
-        zoom: 2,
-        minZoom: 0,
-        maxZoom: 10,
-    }),
-    target: "map"
-});
-
-
-
-
 class SpotMap {
-    constructor(data) {
-        this.data = data;
-        this.map = defaultMap;
+    constructor(layers) {
+        this.layers = [...layers.map(layer => layer.layer), defaultMarkerLayer]
+        this.layerControls = layers.map(layer => new LayerControl(layer.name, layer.layer))
+        this.map = this.createMap(this.layerControls, this.layers);
         this.addEvents(this.map.layers)
-        this.addMarkersAsLonLat(this.data.rows, getCircle('red', 'purple', .75, 21))
+
     }
 
     addMarkersAsLonLat = (rows, style) => {
@@ -100,6 +63,21 @@ class SpotMap {
             if (title !== 'MarkerLayer') {
                 title === mapTitle ? layer.setVisible(true) : layer.setVisible(false);
             }
+        });
+    }
+
+    createMap = (layerControls, layers) => {
+        console.log(layers)
+        return new Map({
+            controls: defaultControls().extend(layerControls),
+            layers: layers,
+            view: new View({
+                center: defaultCenter,
+                zoom: 2,
+                minZoom: 0,
+                maxZoom: 10,
+            }),
+            target: "map"
         });
     }
 }
