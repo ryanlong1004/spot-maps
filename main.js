@@ -1,7 +1,7 @@
 
 import { SpotMap } from './map'
 
-const data = fetch('./response.json').then((response) =>
+fetch('./response.json').then((response) =>
     response.json()
 ).then(
     response => {

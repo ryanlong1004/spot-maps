@@ -41,7 +41,7 @@ const layerControls = [
     new LayerControl({ name: 'Standard', title: 'OSMStandard' }),
     new LayerControl({ name: 'Imagery', title: 'ArcgisImagery' }),
     new LayerControl({ name: 'StreetMap', title: 'ArcgisStreetMap' }),
-    new LayerControl({ name: 'Topograph', title: 'ArcgisTopograph' })
+    new LayerControl({ name: 'Topograph', title: 'ArcgisTopograph' }),
 ]
 
 const defaultMap = new Map({
@@ -64,7 +64,7 @@ class SpotMap {
         this.data = data;
         this.map = defaultMap;
         this.addEvents(this.map.layers)
-        this.addMarkersAsLonLat(this.data.rows, getCircle('blue', 'black', .25, 10))
+        this.addMarkersAsLonLat(this.data.rows, getCircle('red', 'purple', .75, 21))
     }
 
     addMarkersAsLonLat = (rows, style) => {

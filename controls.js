@@ -33,6 +33,7 @@ class LayerControl extends Control {
     handleSelection(new_title) {
         // this.getMap().getView().setRotation(0);
         this.getMap().getAllLayers().forEach(layer => {
+            console.debug("switching layer")
             const title = layer.get('title');
             if (title !== 'MarkerLayer') {
                 title === new_title ? layer.setVisible(true) : layer.setVisible(false);
