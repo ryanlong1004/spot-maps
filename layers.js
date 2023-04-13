@@ -2,6 +2,11 @@ import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 import XYZ from "ol/source/XYZ";
 import { LayerControl } from "./controls";
+import Vector from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import { getCircle } from './mapStyles'
+
+const defaultMarkerStyle = getCircle('red', 'black', 1, 5)
 
 // sourceBasePrefix: 'https://server.arcgisonline.com/ArcGIS/rest/services/',
 
@@ -47,4 +52,12 @@ let openStreetMapStandard = new TileLayer({
     title: "OSMStandard",
 });
 
-export { SpotLayer, openStreetMapStandard, arcgisImagery, arcgisTopograph, arcgisStreetMap }
+let markerLayer = new Vector({
+    source: new VectorSource(),
+    style: defaultMarkerStyle,
+    title: 'MarkerLayer',
+    visible: true,
+    opacity: 100
+});
+
+export { SpotLayer, openStreetMapStandard, arcgisImagery, arcgisTopograph, arcgisStreetMap, markerLayer }

@@ -1,36 +1,39 @@
 import "./style.css";
 import { Map, View } from "ol";
-import Vector from "ol/layer/Vector";
-import VectorSource from "ol/source/Vector";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { fromLonLat } from 'ol/proj'
 import { circleRed, getCircle } from "./mapStyles";
-import { Control, defaults as defaultControls } from 'ol/control.js';
 import { LayerControl } from "./controls";
+import { markerLayer } from "./layers"
+
 
 
 const defaultCenter = [39.1189, -94.5207];
 
 
-let defaultMarkerLayer = new Vector({
-    source: new VectorSource(),
-    style: getCircle('red', 'black', .25, 10),
-    title: 'MarkerLayer',
-    visible: true,
-    opacity: 100
-});
 
 class SpotMap {
-    constructor(layers) {
-        this.layers = [...layers.map(layer => layer.layer), defaultMarkerLayer]
-        this.layerControls = layers.map(layer => new LayerControl(layer.name, layer.layer))
-        this.map = this.createMap(this.layerControls, this.layers);
-        this.addEvents(this.map.layers)
-
+    constructor(layers, popups) {
+        this.map = this.createMap();
+        this.addLayers(layers, [markerLayer])
+        this.addPopups(popups)
     }
 
-    addMarkersAsLonLat = (rows, style) => {
+    addLayers = (userLayers, mapLayers) => {
+        [...userLayers.map(layer => layer.layer), ...mapLayers].map(layer => this.map.addLayer(layer))
+        userLayers.map(layer =>
+            this.map.addControl(new LayerControl(layer.name, layer.layer)))
+    }
+
+    addPopups = (overlays) => {
+        overlays.map(overlay => {
+            this.map.addOverlay(overlay.overlay)
+            this.addEvent(overlay)
+        })
+    }
+
+    addMarkersFromLonLat = (rows, style) => {
         this.addMarkers(rows.map(function (item) {
             return fromLonLat([item.lon, item.lat]);
         }), style)
@@ -41,19 +44,19 @@ class SpotMap {
     }
 
     addMarker = (coords, style) => {
-        // console.debug(`adding marker at ${coords}`)
-        console
         if (style) {
-            defaultMarkerLayer.setStyle(style)
+            markerLayer.setStyle(style)
         }
-        defaultMarkerLayer.getSource().addFeature(new Feature(new Point(coords)))
+        markerLayer.getSource().addFeature(new Feature(new Point(coords)))
     }
 
-    addEvents = () => {
-        console.debug("adding events")
-        this.map.on("click", e => {
-            // this.addMarker(e.coordinate);
+    addEvent = (overlay) => {
+        this.map.on('singleclick', (evt) => {
+            overlay.content.innerHTML = '<p>You clicked here:</p><code>' + evt.coordinate + '</code>';
+            overlay.overlay.setPosition(evt.coordinate);
         });
+
+
     }
 
     toggleMapLayer = (mapTitle) => {
@@ -66,11 +69,8 @@ class SpotMap {
         });
     }
 
-    createMap = (layerControls, layers) => {
-        console.log(layers)
+    createMap = () => {
         return new Map({
-            controls: defaultControls().extend(layerControls),
-            layers: layers,
             view: new View({
                 center: defaultCenter,
                 zoom: 2,
@@ -80,6 +80,83 @@ class SpotMap {
             target: "map"
         });
     }
+}
+
+function getPopupContent(spot) {
+    var mcenter = ol.proj.toLonLat(map.getView().getCenter());
+    var mlat = mcenter[1];
+    var mlon = mcenter[0];
+    var mzoom = map.getView().getZoom();
+    var content = '<div id="pop"><strong>' + spot.name + '</strong>' + '<br />' +
+        '( ' + spot.lon + '&nbsp;&nbsp;' + spot.lat + ' )' + '&nbsp;&nbsp;&nbsp;&nbsp;' +
+        spot.snumunum + '&nbsp;&nbsp;&nbsp;&nbsp;WFO:&nbsp;' + spot.wfo + '<br />' +
+        'WFO:&nbsp;' + spot.wfo + '<br />' +
+        '<strong>Request Made:&nbsp;</strong>' + spot.rmade + '<br />' +
+        '<strong>Deliver Time:&nbsp;</strong>' + spot.deliverdtg + '<br />' +
+        '<strong>Request Fill:&nbsp;</strong>' + spot.rfill + '<br /><br />' +
+        '<div id="actions">' +
+        '<table border="0" cellpadding="0" cellspacing="0" align="center">';
+    //'<tr><td><a href="../php/forecast.php?snumunum='+spot.snumunum+'" target="_blank">View Forecast</a></td>'+
+    // Cannot store lat/lon/zoom when listener is added because this function is not called when map is
+    // panned/zoomed.  So calling a javascript function that gets current lat/lon/z, then calls the forecast.php code
+
+    // Other code modifies the spot.name, turning it into an href.  This code just
+    // gets the actual name from within the href...then escapes the apostrophes
+    var jsSafeName = spot.name.substring(0, spot.name.length - 4);
+    var last = jsSafeName.lastIndexOf('>');
+    jsSafeName = jsSafeName.substr(last + 1, jsSafeName.length - last - 1);
+    // rjh 20oct16 temp kludge to fix problem with apostrophes in name cause js errors
+    jsSafeName = jsSafeName.replace(/&#39;/g, "'");
+    jsSafeName = jsSafeName.replace(/'/g, "\\'");
+
+    //spot.accesslevel = ACCESS_OWNER;
+
+    if (spot.accesslevel == ACCESS_EDIT) {
+        if (spot.stat == 'C') {
+            content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onCloseRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Archive</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onConfirmDeleteRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Delete</a></td>';
+            content = content + '<tr><td align="center"><a href="javascript:void(0)" onclick="javascript:onRequestForecastUpdate(\'' + spot.snumunum + '\',\'' + spot.lat + '\',\'' + spot.lon + '\')">Request Forecast Update</a></td>';
+        }
+        if (spot.stat == 'P') {
+            content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onChangeRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Change&nbsp;Request</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onCloseRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Archive</a></td>';
+            content = content + '<tr><td align="center"><a href="javascript:void(0)" onclick="javascript:onConfirmDeleteRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Delete</a></td>';
+        }
+        if (spot.stat == 'Q') {
+            content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onChangeRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Change&nbsp;Request</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onCloseRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Archive</a></td>';
+            content = content + '<tr><td align="center"><a href="javascript:void(0)" onclick="javascript:onConfirmDeleteRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Delete</a></td>';
+        }
+    } else {
+        if (spot.accesslevel == ACCESS_OWNER) {
+            if (spot.stat == 'C') {
+                content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onConfirmDeleteRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Delete</a></td>';
+                content = content + '<tr><td align="center"><a href="javascript:void(0)" onclick="javascript:onRequestForecastUpdate(\'' + spot.snumunum + '\',\'' + spot.lat + '\',\'' + spot.lon + '\')">Request Forecast Update</a></td>';
+
+            }
+            if (spot.stat == 'P') {
+                content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onChangeRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Change&nbsp;Request</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onConfirmDeleteRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Delete</a></td>';
+            }
+            if (spot.stat == 'Q') {
+                content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onChangeRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Change&nbsp;Request</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onConfirmDeleteRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Delete</a></td>';
+            }
+        }
+        else if (spot.accesslevel == ACCESS_VIEW) {
+            if (spot.stat == 'C') {
+                content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a></td>';
+            }
+            if (spot.stat == 'P') {
+                content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onChangeRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Change&nbsp;Request</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a></td>';
+            }
+            if (spot.stat == 'Q') {
+                content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="javascript:onChangeRequest(\'' + spot.snumunum + '\',\'' + jsSafeName + '\')">Change&nbsp;Request</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a></td>';
+            }
+        } else {
+            if (spot.accesslevel != ACCESS_BLOCKED) {
+                content = content + '<tr><td><a href="javascript:void(0)" onclick="javascript:viewForecast(\'' + spot.snumunum + '\')">View</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="../php/submit_obs.php?mode=submitobs&snumunum=' + spot.snumunum + '&lat=' + mlat + '&lon=' + mlon + '&z=' + mzoom + '">Submit&nbsp;Obs</a></td>';
+            }
+        }
+    }
+
+    content = content + '</table></div></div>';
+    return content;
 }
 
 export { SpotMap }

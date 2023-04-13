@@ -3,6 +3,7 @@ import { arcgisImagery, openStreetMapStandard, arcgisStreetMap, arcgisTopograph 
 import { SpotMap } from './map'
 import { getCircle } from './mapStyles'
 import { SpotLayer } from './layers'
+import { PopUpContainer } from './popup'
 
 // const url = 'https://www.weather.gov/spot/monitor/monitor_server_json.php?wfo=all'
 const url = './response.json'
@@ -18,10 +19,8 @@ fetch(url).then((response) =>
     response.json()
 ).then(
     response => {
-        let map = new SpotMap(layers)
-        console.log(response.rows)
-        map.addMarkersAsLonLat(response.rows, getCircle('red', 'black', .1, 10))
+        let map = new SpotMap(layers, [new PopUpContainer()])
+        map.addMarkersFromLonLat(response.rows)
     }
 );
 
-// 
