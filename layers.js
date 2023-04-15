@@ -5,6 +5,13 @@ import { LayerControl } from "./controls";
 import Vector from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import { getCircle } from './mapStyles'
+import {
+    Circle as CircleStyle,
+    Fill,
+    Stroke,
+    Style,
+    Text,
+} from 'ol/style.js';
 
 const defaultMarkerStyle = getCircle('red', 'black', 1, 5)
 
@@ -57,7 +64,7 @@ let markerLayer = new Vector({
     style: defaultMarkerStyle,
     title: 'MarkerLayer',
     visible: true,
-    opacity: 100
+    opacity: 50,
 });
 
 export { SpotLayer, openStreetMapStandard, arcgisImagery, arcgisTopograph, arcgisStreetMap, markerLayer }

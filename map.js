@@ -2,7 +2,7 @@ import "./style.css";
 import { Map, View } from "ol";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
-import { fromLonLat } from 'ol/proj'
+import { fromLonLat, toLonLat } from 'ol/proj'
 import { circleRed, getCircle } from "./mapStyles";
 import { LayerControl } from "./controls";
 import { markerLayer } from "./layers"
@@ -18,6 +18,7 @@ class SpotMap {
         this.map = this.createMap();
         this.addLayers(layers, [markerLayer])
         this.addPopups(popups)
+        this.rows = []
     }
 
     addLayers = (userLayers, mapLayers) => {
@@ -34,6 +35,7 @@ class SpotMap {
     }
 
     addMarkersFromLonLat = (rows, style) => {
+        this.rows = rows
         this.addMarkers(rows.map(function (item) {
             return fromLonLat([item.lon, item.lat]);
         }), style)
@@ -52,11 +54,14 @@ class SpotMap {
 
     addEvent = (overlay) => {
         this.map.on('singleclick', (evt) => {
-            overlay.content.innerHTML = '<p>You clicked here:</p><code>' + evt.coordinate + '</code>';
+            const feature = this.map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+                return feature;
+            });
+            if (!feature) return;
+            this.createPopup(feature);
+            overlay.content.innerHTML = this.createPopup(feature)
             overlay.overlay.setPosition(evt.coordinate);
         });
-
-
     }
 
     toggleMapLayer = (mapTitle) => {
@@ -67,6 +72,16 @@ class SpotMap {
                 title === mapTitle ? layer.setVisible(true) : layer.setVisible(false);
             }
         });
+    }
+
+    createPopup = (feature) => {
+        console.log(feature.getProperties())
+        const coord = toLonLat(feature.getGeometry().getCoordinates())
+        console.log(coord[0].toFixed(4), coord[1].toFixed(4))
+        const result = this.rows.filter(row => row.lon == coord[0].toFixed(4) && row.lat == coord[1].toFixed(4))
+        return result;
+
+
     }
 
     createMap = () => {

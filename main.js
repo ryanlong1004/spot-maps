@@ -1,7 +1,7 @@
 
 import { arcgisImagery, openStreetMapStandard, arcgisStreetMap, arcgisTopograph } from './layers'
 import { SpotMap } from './map'
-import { getCircle } from './mapStyles'
+import { getCircle, completedGreen } from './mapStyles'
 import { SpotLayer } from './layers'
 import { PopUpContainer } from './popup'
 
@@ -20,7 +20,7 @@ fetch(url).then((response) =>
 ).then(
     response => {
         let map = new SpotMap(layers, [new PopUpContainer()])
-        map.addMarkersFromLonLat(response.rows)
+        map.addMarkersFromLonLat(response.rows, completedGreen)
     }
 );
 
