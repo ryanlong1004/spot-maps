@@ -59,7 +59,7 @@ class SpotMap {
             });
             if (!feature) return;
             this.createPopup(feature);
-            overlay.content.innerHTML = this.createPopup(feature)
+            overlay.content.innerHTML = JSON.stringify(this.createPopup(feature))
             overlay.overlay.setPosition(evt.coordinate);
         });
     }
@@ -77,8 +77,8 @@ class SpotMap {
     createPopup = (feature) => {
         console.log(feature.getProperties())
         const coord = toLonLat(feature.getGeometry().getCoordinates())
-        console.log(coord[0].toFixed(4), coord[1].toFixed(4))
-        const result = this.rows.filter(row => row.lon == coord[0].toFixed(4) && row.lat == coord[1].toFixed(4))
+        console.log(coord[0].toFixed(3), coord[1].toFixed(3))
+        const result = this.rows.filter(row => parseFloat(row.lon).toFixed(4) == coord[0].toFixed(4) && parseFloat(row.lat).toFixed(4) == coord[1].toFixed(4))
         return result;
 
 
