@@ -25,12 +25,21 @@ class SpotMap {
         this.rows = []
     }
 
+    /**
+     * Add layers passed from user and required layers to map
+     * @param {Layer} userLayers 
+     * @param {Layer} mapLayers 
+     */
     addLayers = (userLayers, mapLayers) => {
         [...userLayers.map(layer => layer.layer), ...mapLayers].map(layer => this.map.addLayer(layer))
         userLayers.map(layer =>
             this.map.addControl(new LayerControl(layer.name, layer.layer)))
     }
 
+    /**
+     * Add popup overlays and events to map
+     * @param {Overlay} overlays 
+     */
     addPopups = (overlays) => {
         overlays.map(overlay => {
             this.map.addOverlay(overlay.overlay)
@@ -38,6 +47,11 @@ class SpotMap {
         })
     }
 
+    /**
+     * Add markers to map from lon and lat, with an optional style
+     * @param {object} rows 
+     * @param {Style} style 
+     */
     addMarkersFromLonLat = (rows, style) => {
         this.rows = rows
         this.addMarkers(rows.map(function (item) {
@@ -69,18 +83,25 @@ class SpotMap {
             '<table border="0" cellpadding="0" cellspacing="0" align="center">';
     }
 
+    /**
+     * Add single click event to an overlay
+     * @param {*} overlay 
+     */
     addEvent = (overlay) => {
         this.map.on('singleclick', (evt) => {
             const feature = this.map.forEachFeatureAtPixel(evt.pixel, function (feature) {
                 return feature;
             });
             if (!feature) return;
-            this.lookupSpotRequestByLonLat(feature);
             overlay.content.innerHTML = this.getPopupContentV2(this.lookupSpotRequestByLonLat(feature))
             overlay.overlay.setPosition(evt.coordinate);
         });
     }
 
+    /**
+     * Toggles a map layer on by title, mutuall exclusive
+     * @param {string} mapTitle 
+     */
     toggleMapLayer = (mapTitle) => {
         console.debug(`toggling layer ${mapTitle}`)
         this.map.getAllLayers().forEach(layer => {
@@ -91,6 +112,11 @@ class SpotMap {
         });
     }
 
+    /**
+     * Looks up a Spot Request by Lattitude and Longitiude fixed to 4 decimal places
+     * @param {*} feature 
+     * @returns object
+     */
     lookupSpotRequestByLonLat = (feature) => {
         const coord = toLonLat(feature.getGeometry().getCoordinates())
         return this.rows.filter(row => this.formatCoordinate(row.lon) == this.formatCoordinate(coord[0]) && this.formatCoordinate(row.lat) == this.formatCoordinate(coord[1]))[0]
