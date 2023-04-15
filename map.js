@@ -14,6 +14,10 @@ const defaultCenter = [39.1189, -94.5207];
 
 
 class SpotMap {
+
+    zoom = 2
+    minZoom = 0
+    maxZoom = 10
     constructor(layers, popups) {
         this.map = this.createMap();
         this.addLayers(layers, [markerLayer])
@@ -52,14 +56,27 @@ class SpotMap {
         markerLayer.getSource().addFeature(new Feature(new Point(coords)))
     }
 
+    getPopupContentV2 = (spot) => {
+        console.log(spot)
+        return '<div id="pop"><strong>' + spot.name + '</strong>' + '<br />' +
+            '( ' + spot.lon + '&nbsp;&nbsp;' + spot.lat + ' )' + '&nbsp;&nbsp;&nbsp;&nbsp;' +
+            spot.snumunum + '&nbsp;&nbsp;&nbsp;&nbsp;WFO:&nbsp;' + spot.wfo + '<br />' +
+            'WFO:&nbsp;' + spot.wfo + '<br />' +
+            '<strong>Request Made:&nbsp;</strong>' + spot.rmade + '<br />' +
+            '<strong>Deliver Time:&nbsp;</strong>' + spot.deliverdtg + '<br />' +
+            '<strong>Request Fill:&nbsp;</strong>' + spot.rfill + '<br /><br />' +
+            '<div id="actions">' +
+            '<table border="0" cellpadding="0" cellspacing="0" align="center">';
+    }
+
     addEvent = (overlay) => {
         this.map.on('singleclick', (evt) => {
             const feature = this.map.forEachFeatureAtPixel(evt.pixel, function (feature) {
                 return feature;
             });
             if (!feature) return;
-            this.createPopup(feature);
-            overlay.content.innerHTML = JSON.stringify(this.createPopup(feature))
+            this.lookupSpotRequestByLonLat(feature);
+            overlay.content.innerHTML = this.getPopupContentV2(this.lookupSpotRequestByLonLat(feature))
             overlay.overlay.setPosition(evt.coordinate);
         });
     }
@@ -74,23 +91,20 @@ class SpotMap {
         });
     }
 
-    createPopup = (feature) => {
-        console.log(feature.getProperties())
+    lookupSpotRequestByLonLat = (feature) => {
         const coord = toLonLat(feature.getGeometry().getCoordinates())
-        console.log(coord[0].toFixed(3), coord[1].toFixed(3))
-        const result = this.rows.filter(row => parseFloat(row.lon).toFixed(4) == coord[0].toFixed(4) && parseFloat(row.lat).toFixed(4) == coord[1].toFixed(4))
-        return result;
-
-
+        return this.rows.filter(row => this.formatCoordinate(row.lon) == this.formatCoordinate(coord[0]) && this.formatCoordinate(row.lat) == this.formatCoordinate(coord[1]))[0]
     }
+
+    formatCoordinate = (value) => parseFloat(value).toFixed(4)
 
     createMap = () => {
         return new Map({
             view: new View({
                 center: defaultCenter,
-                zoom: 2,
-                minZoom: 0,
-                maxZoom: 10,
+                zoom: this.zoom,
+                minZoom: this.minZoom,
+                maxZoom: this.maxZoom,
             }),
             target: "map"
         });
