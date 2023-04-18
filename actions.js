@@ -3,7 +3,7 @@ import { toLonLat } from 'ol/proj';
 
 class PopUp {
     constructor() {
-        this.build()
+        this.buildAndAppendContainer()
         this.container = document.getElementById('popup');
         this.content = document.getElementById('popup-content');
         this.closer = document.getElementById('popup-closer');
@@ -22,7 +22,7 @@ class PopUp {
         };
     }
 
-    build = () => {
+    buildAndAppendContainer = () => {
         const container = document.createElement('div')
         container.id = 'popup'
         container.classList = 'ol-popup'
@@ -36,12 +36,6 @@ class PopUp {
         document.getElementsByTagName('body')[0].appendChild(container)
     }
 }
-
-{/* <div id="popup" class="ol-popup">
-    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
-    <div id="popup-content"></div>
-</div> */}
-
 
 
 /**
