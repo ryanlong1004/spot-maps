@@ -1,5 +1,4 @@
 import Overlay from 'ol/Overlay.js';
-import { toLonLat } from 'ol/proj';
 
 class PopUp {
     constructor() {
@@ -55,10 +54,4 @@ const popUpEvent = (map) => {
     });
 }
 
-const mapClickEvent = (map) => {
-    map.map.on('singleclick', (evt) => {
-        console.log(toLonLat(evt.coordinate));
-    });
-}
-
-export { PopUp, mapClickEvent, popUpEvent }
+export default popUpEvent

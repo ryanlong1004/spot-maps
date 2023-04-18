@@ -2,7 +2,8 @@
 import { arcgisImagery, openStreetMapStandard, arcgisStreetMap, arcgisTopograph } from './layers'
 import { SpotMap } from './map'
 import { SpotLayer } from './layers'
-import { mapClickEvent, popUpEvent } from './actions'
+import mapClickEvent from './actions/coordClick'
+import popUpEvent from './actions/popup'
 
 // const url = 'https://www.weather.gov/spot/monitor/monitor_server_json.php?wfo=all'
 const url = './response.json'

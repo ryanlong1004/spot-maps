@@ -6,7 +6,6 @@ import { fromLonLat, toLonLat } from 'ol/proj'
 import { circleRed, getCircle, markerOC } from "./mapStyles";
 import { LayerControl } from "./controls";
 import { markerLayer } from "./layers"
-import { mapClickEvent, popUpEvent } from "./actions";
 
 
 
@@ -29,6 +28,10 @@ class SpotMap {
         this.rows = []
     }
 
+    /**
+     * Fetches data from URL and adds markers
+     * @param {str} url 
+     */
     update = (url) => {
         fetch(url).then((response) =>
             response.json()
@@ -52,16 +55,9 @@ class SpotMap {
     }
 
     /**
-     * Add popup overlays and events to map
-     * @param {Overlay} actions 
+     * Add actions to the map
+     * @param {[fx]} actions 
      */
-    // addActions = (actions) => {
-    //     actions.map(actionClass => {
-    //         const action = new actionClass(this.map)
-    //         this.map.addOverlay(action.overlay)
-    //         this.addEvent(action)
-    //     })
-    // }
     addActions = (actions) => {
         actions.map(action => action(this))
     }
@@ -78,10 +74,20 @@ class SpotMap {
         }), style)
     }
 
+    /**
+     * Add markers to the map with optional style
+     * @param {[obj]} rows 
+     * @param {obj} style 
+     */
     addMarkers = (rows, style) => {
         rows.map((x) => this.addMarker(x, style))
     }
 
+    /**
+     * Add marker to map with optional style
+     * @param {[float, float]} coords 
+     * @param {obj} style 
+     */
     addMarker = (coords, style) => {
         if (style) {
             markerLayer.setStyle(style)
@@ -117,8 +123,6 @@ class SpotMap {
         });
     }
 
-
-
     /**
      * Toggles a map layer on by title, mutuall exclusive
      * @param {string} mapTitle 
@@ -143,11 +147,26 @@ class SpotMap {
         return this.rows.filter(row => this.formatCoordinate(row.lon) == this.formatCoordinate(coord[0]) && this.formatCoordinate(row.lat) == this.formatCoordinate(coord[1]))[0]
     }
 
+    /**
+     * Returns float to the 9th decimal place
+     * @param {float} value 
+     * @returns float
+     */
     formatCoordinate = (value) => parseFloat(value).toFixed(9)
 
+    /**
+     * Centers the map on longitute and lattitude
+     * @param {[float, float]} coords 
+     */
     centerOnLonLat = (coords) => {
         this.map.getView().setCenter(fromLonLat(coords))
     }
+    
+    /**
+     * Creates and renders open layers map
+     * @param {object} options 
+     * @returns 
+     */
     createMap = (options) => {
         const center = options.center ? fromLonLat(options.center) : defaultCenter
         return new Map({
