@@ -36,6 +36,25 @@ class PopUp {
     }
 }
 
+const formatPopupContent = (spot) => {
+    return `
+    <div>
+    <strong>${spot.name}</strong> <span style="float: right; margin-right: 10%">${spot.snumunum}</span>
+    <hr>
+    </div>
+    <div style="padding-bottom: 12px">
+    @${spot.lon},${spot.lat}
+    <span style="float: right; margin-right: 10%">
+    WFO: ${spot.wfo}
+    </span>
+    </div>
+    <div>
+    <strong>Request Made:</strong><span style="float: right">${spot.rmade}</span> 
+    <strong>Deliver Time:</strong><span style="float: right">${spot.deliverdtg}</span> 
+    <strong>Request Fill:</strong><span style="float: right">${spot.rfill}</span>
+    </div>`
+}
+
 
 /**
    * Add single click event to an overlay
@@ -49,9 +68,14 @@ const popUpEvent = (map) => {
             return feature;
         });
         if (!feature) return;
-        container.content.innerHTML = map.getPopupContentV2(map.lookupSpotRequestByLonLat(feature))
+        const data = map.lookupSpotRequestByLonLat(feature)
+        console.log(data)
+        container.content.innerHTML = formatPopupContent(map.lookupSpotRequestByLonLat(feature))
         container.overlay.setPosition(evt.coordinate);
     });
 }
+
+
+
 
 export default popUpEvent

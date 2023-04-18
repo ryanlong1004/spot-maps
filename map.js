@@ -95,19 +95,6 @@ class SpotMap {
         markerLayer.getSource().addFeature(new Feature(new Point(coords)))
     }
 
-    getPopupContentV2 = (spot) => {
-        console.log(spot)
-        return '<div id="pop"><strong>' + spot.name + '</strong>' + '<br />' +
-            '( ' + spot.lon + '&nbsp;&nbsp;' + spot.lat + ' )' + '&nbsp;&nbsp;&nbsp;&nbsp;' +
-            spot.snumunum + '&nbsp;&nbsp;&nbsp;&nbsp;WFO:&nbsp;' + spot.wfo + '<br />' +
-            'WFO:&nbsp;' + spot.wfo + '<br />' +
-            '<strong>Request Made:&nbsp;</strong>' + spot.rmade + '<br />' +
-            '<strong>Deliver Time:&nbsp;</strong>' + spot.deliverdtg + '<br />' +
-            '<strong>Request Fill:&nbsp;</strong>' + spot.rfill + '<br /><br />' +
-            '<div id="actions">' +
-            '<table border="0" cellpadding="0" cellspacing="0" align="center">';
-    }
-
     /**
      * Add single click event to an overlay
      * @param {*} overlay 
@@ -161,7 +148,7 @@ class SpotMap {
     centerOnLonLat = (coords) => {
         this.map.getView().setCenter(fromLonLat(coords))
     }
-    
+
     /**
      * Creates and renders open layers map
      * @param {object} options 

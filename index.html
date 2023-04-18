@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/x-icon" href="https://openlayers.org/favicon.ico" />
-  <link rel="stylesheet" href="node_modules/ol/ol.css">
+  <link rel="stylesheet" href="./spot_map.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Using OpenLayers with Vite</title>
 </head>
@@ -14,119 +14,7 @@
   <script type="module" src="./main.js"></script>
 </body>
 
-<style>
-  * {
-    box-sizing: border-box
-  }
 
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  .grid-container {
-    max-width: 40vw;
-    overflow: hidden;
-  }
-</style>
-
-<style>
-  .ol-popup {
-    position: absolute;
-    background-color: white;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    padding: 15px;
-    border-radius: 10px;
-    border: 1px solid #cccccc;
-    bottom: 12px;
-    left: -50px;
-    min-width: 280px;
-  }
-
-  /* CSS */
-  .layer-control-button {
-    position: relative;
-    min-width: 10vw;
-    margin: .15em;
-    top: 20vh;
-    left: .5vw;
-    align-items: center;
-    appearance: none;
-    background-color: rgba(246, 247, 248, 0.5);
-
-    border-width: 1px;
-    box-sizing: border-box;
-    color: black;
-    cursor: pointer;
-    display: inline-flex;
-    /* font-family: "JetBrains Mono", monospace; */
-    height: 20px;
-    justify-content: center;
-    /* line-height: 1; */
-    /* list-style: none; */
-    overflow: hidden;
-    padding: 2px;
-    text-align: left;
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: box-shadow .15s, transform .15s;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    white-space: nowrap;
-    will-change: box-shadow, transform;
-    font-size: 14px;
-  }
-
-  .layer-control-button:focus {
-    box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-  }
-
-  .layer-control-button:hover {
-    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-    transform: translateY(-2px);
-  }
-
-  .layer-control-button:active {
-    box-shadow: #D6D6E7 0 3px 7px inset;
-    transform: translateY(2px);
-  }
-
-  .ol-popup:after,
-  .ol-popup:before {
-    top: 100%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .ol-popup:after {
-    border-top-color: white;
-    border-width: 10px;
-    left: 48px;
-    margin-left: -10px;
-  }
-
-  .ol-popup:before {
-    border-top-color: #cccccc;
-    border-width: 11px;
-    left: 48px;
-    margin-left: -11px;
-  }
-
-  .ol-popup-closer {
-    text-decoration: none;
-    position: absolute;
-    top: 2px;
-    right: 8px;
-  }
-
-  .ol-popup-closer:after {
-    content: "✖";
-  }
 </style>
 
 </html>
