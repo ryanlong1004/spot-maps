@@ -53,11 +53,21 @@ let arcgisStreetMap = new TileLayer({
     title: "ArcgisStreetMap",
 });
 
+let dummyLayer = new TileLayer({
+    source: new XYZ({
+        url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}?appid=45ad401c-fa23-4a10-8b2f-a7ad29a3e2a0",
+        attribution: 'Tiles &copy; <a href="https://www.esri.com/">ESRI</a>',
+    }),
+    visible: false,
+    title: "DummyLayer",
+});
+
 let openStreetMapStandard = new TileLayer({
     source: new OSM(),
     visible: true,
     title: "OSMStandard",
 });
+
 
 let markerLayer = new Vector({
     source: new VectorSource(),
@@ -67,4 +77,4 @@ let markerLayer = new Vector({
     opacity: 50,
 });
 
-export { SpotLayer, openStreetMapStandard, arcgisImagery, arcgisTopograph, arcgisStreetMap, markerLayer }
+export { SpotLayer, openStreetMapStandard, arcgisImagery, arcgisTopograph, arcgisStreetMap, markerLayer, dummyLayer }

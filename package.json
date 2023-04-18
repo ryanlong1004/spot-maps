@@ -8,9 +8,13 @@
   },
   "devDependencies": {
     "typescript": "^4.9.5",
-    "vite": "^4.0.4"
+    "vite": "^4.2.2"
   },
   "dependencies": {
     "ol": "latest"
-  }
+  },
+  "description": "## To Run Locally",
+  "main": "main.js",
+  "author": "",
+  "license": "ISC"
 }

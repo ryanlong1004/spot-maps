@@ -3,26 +3,41 @@ import { Map, View } from "ol";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { fromLonLat, toLonLat } from 'ol/proj'
-import { circleRed, getCircle } from "./mapStyles";
+import { circleRed, getCircle, markerOC } from "./mapStyles";
 import { LayerControl } from "./controls";
 import { markerLayer } from "./layers"
+import { mapClickEvent, popUpEvent } from "./actions";
 
 
 
 const defaultCenter = [39.1189, -94.5207];
 
-
+const defaults = {
+    zoom: 4,
+    minZoom: 0,
+    maxZoom: 10,
+}
 
 class SpotMap {
 
-    zoom = 2
-    minZoom = 0
-    maxZoom = 10
-    constructor(layers, popups) {
-        this.map = this.createMap();
+
+    constructor(layers, actions, options = defaults) {
+        this.map = this.createMap(options);
+        this.updateUrl = options.updateUrl;
         this.addLayers(layers, [markerLayer])
-        this.addPopups(popups)
+        this.addActions(actions)
         this.rows = []
+    }
+
+    update = (url) => {
+        fetch(url).then((response) =>
+            response.json()
+        ).then(
+            response => {
+                this.rows = response.rows
+                this.addMarkersFromLonLat(this.rows, markerOC)
+            }
+        );
     }
 
     /**
@@ -38,13 +53,17 @@ class SpotMap {
 
     /**
      * Add popup overlays and events to map
-     * @param {Overlay} overlays 
+     * @param {Overlay} actions 
      */
-    addPopups = (overlays) => {
-        overlays.map(overlay => {
-            this.map.addOverlay(overlay.overlay)
-            this.addEvent(overlay)
-        })
+    // addActions = (actions) => {
+    //     actions.map(actionClass => {
+    //         const action = new actionClass(this.map)
+    //         this.map.addOverlay(action.overlay)
+    //         this.addEvent(action)
+    //     })
+    // }
+    addActions = (actions) => {
+        actions.map(action => action(this))
     }
 
     /**
@@ -98,6 +117,8 @@ class SpotMap {
         });
     }
 
+
+
     /**
      * Toggles a map layer on by title, mutuall exclusive
      * @param {string} mapTitle 
@@ -122,15 +143,19 @@ class SpotMap {
         return this.rows.filter(row => this.formatCoordinate(row.lon) == this.formatCoordinate(coord[0]) && this.formatCoordinate(row.lat) == this.formatCoordinate(coord[1]))[0]
     }
 
-    formatCoordinate = (value) => parseFloat(value).toFixed(4)
+    formatCoordinate = (value) => parseFloat(value).toFixed(9)
 
-    createMap = () => {
+    centerOnLonLat = (coords) => {
+        this.map.getView().setCenter(fromLonLat(coords))
+    }
+    createMap = (options) => {
+        const center = options.center ? fromLonLat(options.center) : defaultCenter
         return new Map({
             view: new View({
-                center: defaultCenter,
-                zoom: this.zoom,
-                minZoom: this.minZoom,
-                maxZoom: this.maxZoom,
+                center: center,
+                zoom: options.zoom,
+                minZoom: options.minZoom,
+                maxZoom: options.maxZoom,
             }),
             target: "map"
         });
