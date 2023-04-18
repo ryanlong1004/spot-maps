@@ -1,5 +1,13 @@
 @import "node_modules/ol/ol.css";
 
+#map {
+  margin: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
 .ol-popup {
   position: absolute;
   z-index: 99;
@@ -12,8 +20,6 @@
   left: -50px;
   min-width: 280px;
 }
-
-
 
 .popup-content {
   margin: 15% auto;
@@ -57,8 +63,6 @@
 .ol-popup-closer:after {
   content: "✖";
 }
-
-
 
 /* CSS */
 .layer-control-button {

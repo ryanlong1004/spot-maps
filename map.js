@@ -148,7 +148,7 @@ class SpotMap {
     centerOnLonLat = (coords) => {
         this.map.getView().setCenter(fromLonLat(coords))
     }
-
+    
     /**
      * Creates and renders open layers map
      * @param {object} options 
