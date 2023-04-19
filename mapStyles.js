@@ -24,6 +24,16 @@ const circleRed = new Style({
 
 })
 
+const text = new Text({
+    font: '12px serif',
+    textAlign: 'center',
+    justify: 'center',
+    text: `A`,
+    fill: new Fill({
+        color: [255, 255, 255, .5],
+    }),
+})
+
 const completedGreen = new Style({
     image: new Circle({
         fill: new Fill({
@@ -52,7 +62,7 @@ const completedGreen = new Style({
 
 })
 
-const getCircle = (fillColor, strokeColor, strokeWidth, radius) => {
+const getCircle = (fillColor, strokeColor, strokeWidth, radius, character) => {
     const fill = new Fill({
         color: fillColor,
     })
@@ -68,6 +78,15 @@ const getCircle = (fillColor, strokeColor, strokeWidth, radius) => {
             stroke: stroke,
             radius: radius,
         }),
+        text: new Text({
+            font: '14px serif',
+            textAlign: 'center',
+            justify: 'center',
+            text: character,
+            fill: new Fill({
+                color: [255, 255, 255, .8],
+            }),
+        })
     })
 }
 
@@ -78,5 +97,12 @@ const markerOC = new Style({
     }),
 })
 
-export { circleRed, markerOC, getCircle, completedGreen }
+const markerOH = new Style({
+    image: new Icon({
+        anchor: [0.5, 1],
+        src: "https://www.weather.gov/spot/images/monitor/H_C_Marker20x34.png",
+    }),
+})
+
+export { circleRed, markerOC, getCircle, completedGreen, markerOH }
 

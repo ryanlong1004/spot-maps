@@ -14,7 +14,7 @@ const defaultCenter = [39.1189, -94.5207];
 const defaults = {
     zoom: 4,
     minZoom: 0,
-    maxZoom: 10,
+    maxZoom: 30,
 }
 
 class SpotMap {
@@ -38,7 +38,19 @@ class SpotMap {
         ).then(
             response => {
                 this.rows = response.rows
-                this.addMarkersFromLonLat(this.rows, markerOC)
+                this.rows.map(item => {
+                    const redCircle = getCircle('red', 'black', 1, 15, 'P')
+                    const greenCircle = getCircle('green', 'black', 1, 15, 'C')
+                    console.log(item.stat.toLowerCase())
+                    if (item.stat.toLowerCase().trim() == 'p') {
+                        this.addMarkerFromLonLat([item.lon, item.lat], getCircle('red', 'black', 1, 15, item.type[0]))
+                    }
+                    if (item.stat.toLowerCase().trim() == 'c') {
+                        this.addMarkerFromLonLat([item.lon, item.lat], getCircle('green', 'black', 1, 15, item.type[0]))
+                    }
+                    // item.stat.toLowerCase() == 'p' ? this.addMarkerFromLonLat([item.lon, item.lat], redCircle) : this.addMarkerFromLonLat([item.lon, item.lat], greenCircle)
+                })
+                // this.addMarkersFromLonLat(this.rows, markerOC)
             }
         );
     }
@@ -73,6 +85,14 @@ class SpotMap {
             return fromLonLat([item.lon, item.lat]);
         }), style)
     }
+
+    addMarkerFromLonLat = (coords, style) => {
+        const feature = new Feature(new Point(fromLonLat(coords)))
+        feature.setStyle(style)
+        markerLayer.getSource().addFeature(feature)
+    }
+
+
 
     /**
      * Add markers to the map with optional style
@@ -148,7 +168,7 @@ class SpotMap {
     centerOnLonLat = (coords) => {
         this.map.getView().setCenter(fromLonLat(coords))
     }
-    
+
     /**
      * Creates and renders open layers map
      * @param {object} options 

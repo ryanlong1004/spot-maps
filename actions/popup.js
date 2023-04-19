@@ -40,6 +40,10 @@ const formatPopupContent = (spot) => {
     return `
     <div>
     <strong>${spot.name}</strong> <span style="float: right; margin-right: 10%">${spot.snumunum}</span>
+    </div>
+    <div style="font-style: italic">
+    ${spot.type.split('<')[0]}
+    </div>
     <hr>
     </div>
     <div style="padding-bottom: 12px">
@@ -49,9 +53,9 @@ const formatPopupContent = (spot) => {
     </span>
     </div>
     <div>
-    <strong>Request Made:</strong><span style="float: right">${spot.rmade}</span> 
-    <strong>Deliver Time:</strong><span style="float: right">${spot.deliverdtg}</span> 
-    <strong>Request Fill:</strong><span style="float: right">${spot.rfill}</span>
+    <div><strong>Request Made:</strong><span style="float: right">${spot.rmade}</span></div>
+    <div><strong>Deliver Time:</strong><span style="float: right">${spot.deliverdtg}</span></div>
+    <div><strong>Request Fill:</strong><span style="float: right">${spot.rfill}</span></div>
     </div>`
 }
 
