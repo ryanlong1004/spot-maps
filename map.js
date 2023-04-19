@@ -1,4 +1,4 @@
-import "./style.css";
+import "./spot_map.css";
 import { Map, View } from "ol";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
@@ -39,18 +39,13 @@ class SpotMap {
             response => {
                 this.rows = response.rows
                 this.rows.map(item => {
-                    const redCircle = getCircle('red', 'black', 1, 15, 'P')
-                    const greenCircle = getCircle('green', 'black', 1, 15, 'C')
-                    console.log(item.stat.toLowerCase())
                     if (item.stat.toLowerCase().trim() == 'p') {
-                        this.addMarkerFromLonLat([item.lon, item.lat], getCircle('red', 'black', 1, 15, item.type[0]))
+                        this.addMarkerAsLonLat([item.lon, item.lat], getCircle('red', 'black', 1, 15, item.type[0]))
                     }
                     if (item.stat.toLowerCase().trim() == 'c') {
-                        this.addMarkerFromLonLat([item.lon, item.lat], getCircle('green', 'black', 1, 15, item.type[0]))
+                        this.addMarkerAsLonLat([item.lon, item.lat], getCircle('green', 'black', 1, 15, item.type[0]))
                     }
-                    // item.stat.toLowerCase() == 'p' ? this.addMarkerFromLonLat([item.lon, item.lat], redCircle) : this.addMarkerFromLonLat([item.lon, item.lat], greenCircle)
                 })
-                // this.addMarkersFromLonLat(this.rows, markerOC)
             }
         );
     }
@@ -79,20 +74,22 @@ class SpotMap {
      * @param {object} rows 
      * @param {Style} style 
      */
-    addMarkersFromLonLat = (rows, style) => {
-        this.rows = rows
-        this.addMarkers(rows.map(function (item) {
-            return fromLonLat([item.lon, item.lat]);
-        }), style)
+    addMarkersAsLonLat = (style) => {
+        this.rows.map(item => {
+            this.addMarkerAsLonLat([item.lon, item.lat], style)
+        })
     }
 
-    addMarkerFromLonLat = (coords, style) => {
+    /**
+     * Adds a marker as Lon, Lat
+     * @param {[lon, lat]]} coords 
+     * @param {obj} style 
+     */
+    addMarkerAsLonLat = (coords, style) => {
         const feature = new Feature(new Point(fromLonLat(coords)))
         feature.setStyle(style)
         markerLayer.getSource().addFeature(feature)
     }
-
-
 
     /**
      * Add markers to the map with optional style

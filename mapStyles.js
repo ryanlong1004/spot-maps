@@ -25,9 +25,10 @@ const circleRed = new Style({
 })
 
 const text = new Text({
-    font: '12px serif',
+    font: '14px serif',
     textAlign: 'center',
     justify: 'center',
+    fontWeight: 'boldest',
     text: `A`,
     fill: new Fill({
         color: [255, 255, 255, .5],
@@ -49,6 +50,7 @@ const completedGreen = new Style({
         font: '12px serif',
         textAlign: 'center',
         justify: 'center',
+        fontWeight: 'boldest',
         text: `A`,
         fill: new Fill({
             color: [255, 255, 255, .5],
@@ -82,6 +84,7 @@ const getCircle = (fillColor, strokeColor, strokeWidth, radius, character) => {
             font: '14px serif',
             textAlign: 'center',
             justify: 'center',
+            fontWeigth: 'boldest',
             text: character,
             fill: new Fill({
                 color: [255, 255, 255, .8],
