@@ -81,7 +81,7 @@ const getCircle = (fillColor, strokeColor, strokeWidth, radius, character) => {
             radius: radius,
         }),
         text: new Text({
-            font: '14px serif',
+            font: '20px serif',
             textAlign: 'center',
             justify: 'center',
             fontWeigth: 'boldest',

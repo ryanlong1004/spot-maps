@@ -73,7 +73,7 @@ const popUpEvent = (map) => {
         });
         if (!feature) return;
         const data = map.lookupSpotRequestByLonLat(feature)
-        console.log(data)
+        console.debug(data)
         container.content.innerHTML = formatPopupContent(map.lookupSpotRequestByLonLat(feature))
         container.overlay.setPosition(evt.coordinate);
     });
