@@ -14,7 +14,7 @@ const defaultCenter = [39.1189, -94.5207];
 const defaults = {
     zoom: 4,
     minZoom: 0,
-    maxZoom: 30,
+    maxZoom: 20,
 }
 
 class SpotMap {

@@ -23,7 +23,7 @@ const actions = [
 const options = {
     zoom: 2,
     minZoom: 0,
-    maxZoom: 10,
+    maxZoom: 20,
     center: [-98.3693, 41.1166],
 }
 
