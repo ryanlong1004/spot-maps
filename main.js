@@ -1,5 +1,5 @@
 
-import { arcgisImagery, openStreetMapStandard, arcgisStreetMap, arcgisTopograph } from './layers'
+import { arcgisImagery, openStreetMapStandard, arcgisStreetMap, arcgisTopograph, OptionalSpotLayer, warningWatch } from './layers'
 import { SpotMap } from './map'
 import { SpotLayer } from './layers'
 import mapClickEvent from './actions/coordClick'

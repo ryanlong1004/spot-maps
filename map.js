@@ -5,7 +5,8 @@ import Point from "ol/geom/Point";
 import { fromLonLat, toLonLat } from 'ol/proj'
 import { circleRed, getCircle, markerOC } from "./mapStyles";
 import { LayerControl } from "./controls";
-import { markerLayer } from "./layers"
+import { markerLayer, warningWatch } from "./layers"
+
 
 
 
@@ -23,7 +24,7 @@ class SpotMap {
     constructor(layers, actions, options = defaults) {
         this.map = this.createMap(options);
         this.updateUrl = options.updateUrl;
-        this.addLayers(layers, [markerLayer])
+        this.addLayers(layers, [warningWatch, markerLayer])
         this.addActions(actions)
         this.rows = []
     }

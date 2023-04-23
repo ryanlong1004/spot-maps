@@ -1,0 +1,473 @@
+{
+  "currentVersion": 10.91,
+  "cimVersion": "2.9.0",
+  "id": 0,
+  "name": "CurrentWarnings",
+  "type": "Feature Layer",
+  "description": "",
+  "geometryType": "esriGeometryPolygon",
+  "sourceSpatialReference": {
+    "wkid": 102100,
+    "latestWkid": 3857,
+    "xyTolerance": 0.001,
+    "zTolerance": 0.001,
+    "mTolerance": 0.001,
+    "falseX": -20037700,
+    "falseY": -30241100,
+    "xyUnits": 10000,
+    "falseZ": -100000,
+    "zUnits": 10000,
+    "falseM": -100000,
+    "mUnits": 10000
+  },
+  "copyrightText": "",
+  "parentLayer": null,
+  "subLayers": [],
+  "minScale": 0,
+  "maxScale": 0,
+  "referenceScale": 0.0,
+  "drawingInfo": {
+    "renderer": {
+      "type": "uniqueValue",
+      "field1": "phenom",
+      "field2": "sig",
+      "uniqueValueInfos": [
+        {
+          "symbol": {
+            "type": "esriSFS",
+            "style": "esriSFSSolid",
+            "color": [0, 0, 0, 0],
+            "outline": {
+              "type": "esriSLS",
+              "style": "esriSLSSolid",
+              "color": [57, 121, 57, 255],
+              "width": 2
+            }
+          },
+          "value": "FF,W",
+          "label": "Flash Flood Warning"
+        },
+        {
+          "symbol": {
+            "type": "esriSFS",
+            "style": "esriSFSSolid",
+            "color": [0, 0, 0, 0],
+            "outline": {
+              "type": "esriSLS",
+              "style": "esriSLSSolid",
+              "color": [230, 152, 0, 255],
+              "width": 2
+            }
+          },
+          "value": "MA,W",
+          "label": "Special Marine Warning"
+        },
+        {
+          "symbol": {
+            "type": "esriSFS",
+            "style": "esriSFSSolid",
+            "color": [0, 0, 0, 0],
+            "outline": {
+              "type": "esriSLS",
+              "style": "esriSLSSolid",
+              "color": [255, 255, 0, 255],
+              "width": 2
+            }
+          },
+          "value": "SV,W",
+          "label": "Severe Thunderstorm Warning"
+        },
+        {
+          "symbol": {
+            "type": "esriSFS",
+            "style": "esriSFSSolid",
+            "color": [0, 0, 0, 0],
+            "outline": {
+              "type": "esriSLS",
+              "style": "esriSLSSolid",
+              "color": [255, 0, 0, 255],
+              "width": 2
+            }
+          },
+          "value": "TO,W",
+          "label": "Tornado Warning"
+        }
+      ],
+      "fieldDelimiter": ",",
+      "authoringInfo": {
+        "colorRamp": {
+          "type": "multipart",
+          "colorRamps": [
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [252, 235, 215, 255],
+              "toColor": [252, 235, 215, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [182, 179, 252, 255],
+              "toColor": [182, 179, 252, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [179, 252, 179, 255],
+              "toColor": [179, 252, 179, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [252, 182, 216, 255],
+              "toColor": [252, 182, 216, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [179, 244, 252, 255],
+              "toColor": [179, 244, 252, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [240, 252, 179, 255],
+              "toColor": [240, 252, 179, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [204, 216, 252, 255],
+              "toColor": [204, 216, 252, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [179, 252, 222, 255],
+              "toColor": [179, 252, 222, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [252, 179, 252, 255],
+              "toColor": [252, 179, 252, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [252, 197, 192, 255],
+              "toColor": [252, 197, 192, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [224, 252, 215, 255],
+              "toColor": [224, 252, 215, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [242, 204, 252, 255],
+              "toColor": [242, 204, 252, 255]
+            },
+            {
+              "type": "algorithmic",
+              "algorithm": "esriCIELabAlgorithm",
+              "fromColor": [252, 233, 184, 255],
+              "toColor": [252, 233, 184, 255]
+            }
+          ]
+        }
+      }
+    },
+    "scaleSymbols": true,
+    "transparency": 0,
+    "labelingInfo": null
+  },
+  "defaultVisibility": true,
+  "extent": {
+    "xmin": -2.00375070672e7,
+    "ymin": 1486285.3374999985,
+    "xmax": 2.0037507067199998e7,
+    "ymax": 1.1711576959700003e7,
+    "spatialReference": {
+      "wkid": 102100,
+      "latestWkid": 3857,
+      "xyTolerance": 0.001,
+      "zTolerance": 0.001,
+      "mTolerance": 0.001,
+      "falseX": -2.2041257773920003e7,
+      "falseY": -30241100,
+      "xyUnits": 1.441480358985159e8,
+      "falseZ": -100000,
+      "zUnits": 10000,
+      "falseM": -100000,
+      "mUnits": 10000
+    }
+  },
+  "hasAttachments": false,
+  "htmlPopupType": "esriServerHTMLPopupTypeAsHTMLText",
+  "displayField": "cap_id",
+  "typeIdField": null,
+  "subtypeFieldName": null,
+  "subtypeField": null,
+  "defaultSubtypeCode": null,
+  "fields": [
+    {
+      "name": "objectid",
+      "type": "esriFieldTypeOID",
+      "alias": "objectid",
+      "domain": null
+    },
+    {
+      "name": "cap_id",
+      "type": "esriFieldTypeString",
+      "alias": "cap_id",
+      "length": 254,
+      "domain": null
+    },
+    {
+      "name": "vtec",
+      "type": "esriFieldTypeString",
+      "alias": "vtec",
+      "length": 48,
+      "domain": null
+    },
+    {
+      "name": "phenom",
+      "type": "esriFieldTypeString",
+      "alias": "phenom",
+      "length": 2,
+      "domain": null
+    },
+    {
+      "name": "sig",
+      "type": "esriFieldTypeString",
+      "alias": "sig",
+      "length": 1,
+      "domain": null
+    },
+    {
+      "name": "wfo",
+      "type": "esriFieldTypeString",
+      "alias": "wfo",
+      "length": 4,
+      "domain": null
+    },
+    {
+      "name": "event",
+      "type": "esriFieldTypeString",
+      "alias": "event",
+      "length": 4,
+      "domain": null
+    },
+    {
+      "name": "issuance",
+      "type": "esriFieldTypeString",
+      "alias": "issuance",
+      "length": 25,
+      "domain": null
+    },
+    {
+      "name": "expiration",
+      "type": "esriFieldTypeString",
+      "alias": "expiration",
+      "length": 25,
+      "domain": null
+    },
+    {
+      "name": "onset",
+      "type": "esriFieldTypeString",
+      "alias": "onset",
+      "length": 25,
+      "domain": null
+    },
+    {
+      "name": "ends",
+      "type": "esriFieldTypeString",
+      "alias": "ends",
+      "length": 25,
+      "domain": null
+    },
+    {
+      "name": "url",
+      "type": "esriFieldTypeString",
+      "alias": "url",
+      "length": 254,
+      "domain": null
+    },
+    {
+      "name": "msg_type",
+      "type": "esriFieldTypeString",
+      "alias": "msg_type",
+      "length": 3,
+      "domain": null
+    },
+    {
+      "name": "prod_type",
+      "type": "esriFieldTypeString",
+      "alias": "prod_type",
+      "length": 40,
+      "domain": null
+    },
+    {
+      "name": "shape",
+      "type": "esriFieldTypeGeometry",
+      "alias": "shape",
+      "domain": null
+    },
+    {
+      "name": "idp_source",
+      "type": "esriFieldTypeString",
+      "alias": "idp_source",
+      "length": 50,
+      "domain": null
+    },
+    {
+      "name": "idp_subset",
+      "type": "esriFieldTypeString",
+      "alias": "idp_subset",
+      "length": 50,
+      "domain": null
+    },
+    {
+      "name": "idp_filedate",
+      "type": "esriFieldTypeDate",
+      "alias": "idp_filedate",
+      "length": 8,
+      "domain": null
+    },
+    {
+      "name": "idp_ingestdate",
+      "type": "esriFieldTypeDate",
+      "alias": "idp_ingestdate",
+      "length": 8,
+      "domain": null
+    },
+    {
+      "name": "idp_current_forecast",
+      "type": "esriFieldTypeInteger",
+      "alias": "idp_current_forecast",
+      "domain": null
+    },
+    {
+      "name": "idp_time_series",
+      "type": "esriFieldTypeInteger",
+      "alias": "idp_time_series",
+      "domain": null
+    },
+    {
+      "name": "idp_issueddate",
+      "type": "esriFieldTypeDate",
+      "alias": "idp_issueddate",
+      "length": 8,
+      "domain": null
+    },
+    {
+      "name": "idp_validtime",
+      "type": "esriFieldTypeDate",
+      "alias": "idp_validtime",
+      "length": 8,
+      "domain": null
+    },
+    {
+      "name": "idp_validendtime",
+      "type": "esriFieldTypeDate",
+      "alias": "idp_validendtime",
+      "length": 8,
+      "domain": null
+    },
+    {
+      "name": "idp_fcst_hour",
+      "type": "esriFieldTypeInteger",
+      "alias": "idp_fcst_hour",
+      "domain": null
+    },
+    {
+      "name": "st_area(shape)",
+      "type": "esriFieldTypeDouble",
+      "alias": "st_area(shape)",
+      "domain": null
+    },
+    {
+      "name": "st_perimeter(shape)",
+      "type": "esriFieldTypeDouble",
+      "alias": "st_perimeter(shape)",
+      "domain": null
+    }
+  ],
+  "geometryField": {
+    "name": "shape",
+    "type": "esriFieldTypeGeometry",
+    "alias": "shape"
+  },
+  "indexes": null,
+  "subtypes": [],
+  "relationships": [],
+  "canModifyLayer": true,
+  "canScaleSymbols": false,
+  "hasLabels": false,
+  "capabilities": "Map,Query,Data",
+  "maxRecordCount": 4000,
+  "supportsStatistics": true,
+  "supportsExceedsLimitStatistics": true,
+  "supportsAdvancedQueries": true,
+  "supportedQueryFormats": "JSON, geoJSON, PBF",
+  "isDataVersioned": false,
+  "ownershipBasedAccessControlForFeatures": { "allowOthersToQuery": true },
+  "useStandardizedQueries": true,
+  "supportedSpatialRelationships": [
+    "esriSpatialRelIntersects",
+    "esriSpatialRelContains",
+    "esriSpatialRelCrosses",
+    "esriSpatialRelEnvelopeIntersects",
+    "esriSpatialRelIndexIntersects",
+    "esriSpatialRelOverlaps",
+    "esriSpatialRelTouches",
+    "esriSpatialRelWithin",
+    "esriSpatialRelRelation"
+  ],
+  "advancedQueryCapabilities": {
+    "useStandardizedQueries": true,
+    "supportsStatistics": true,
+    "supportsPercentileStatistics": true,
+    "supportsHavingClause": true,
+    "supportsOrderBy": true,
+    "supportsDistinct": true,
+    "supportsCountDistinct": true,
+    "supportsPagination": true,
+    "supportsLod": false,
+    "supportsQueryWithLodSR": false,
+    "supportsTrueCurve": true,
+    "supportsQueryWithDatumTransformation": true,
+    "supportsReturningQueryExtent": true,
+    "supportsQueryWithDistance": true,
+    "supportsSqlExpression": true,
+    "supportsTimeRelation": true,
+    "supportsSqlFormat": false,
+    "supportsQueryAnalytic": true
+  },
+  "supportsDatumTransformation": true,
+  "advancedQueryAnalyticCapabilities": {
+    "supportsLinearRegression": true,
+    "supportsAsync": false,
+    "supportsPercentileAnalytic": false
+  },
+  "dateFieldsTimeReference": null,
+  "preferredTimeReference": null,
+  "datesInUnknownTimezone": false,
+  "hasGeometryProperties": true,
+  "geometryProperties": {
+    "shapeAreaFieldName": "st_area(shape)",
+    "shapeLengthFieldName": "st_perimeter(shape)",
+    "units": "esriMeters"
+  },
+  "hasMetadata": true,
+  "isDataArchived": false,
+  "archivingInfo": {
+    "supportsQueryWithHistoricMoment": false,
+    "startArchivingMoment": -1
+  },
+  "supportsCoordinatesQuantization": true,
+  "supportsDynamicLegends": true
+}

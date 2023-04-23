@@ -1,10 +1,14 @@
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
+import { TileArcGISRest } from 'ol/source.js';
 import XYZ from "ol/source/XYZ";
-import { LayerControl } from "./controls";
+import { LayerControl, OptionalLayerControl } from "./controls";
 import Vector from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
+import GeoJSON from 'ol/format/GeoJSON.js';
 import { getCircle } from './mapStyles'
+import { Style, Fill } from "ol/style";
+
 
 
 const defaultMarkerStyle = getCircle('red', 'black', 1, 5)
@@ -16,6 +20,15 @@ class SpotLayer {
         this.control = new LayerControl(name, layer)
     }
 }
+
+class OptionalSpotLayer {
+    constructor(name, layer) {
+        this.name = name
+        this.layer = layer
+        this.control = new OptionalLayerControl(name, layer)
+    }
+}
+
 
 let arcgisTopograph = new TileLayer({
     source: new XYZ({
@@ -51,13 +64,28 @@ let openStreetMapStandard = new TileLayer({
     title: "OSMStandard",
 });
 
+let warningWatch = new TileLayer({
+    source: new TileArcGISRest({
+        url: 'https://mapservices.weather.noaa.gov/eventdriven/rest/services/WWA/watch_warn_adv/MapServer',
+        title: 'WarningWatch',
+        visible: true,
+        opacity: 25,
+    }),
+});
+
 
 let markerLayer = new Vector({
     source: new VectorSource(),
     style: defaultMarkerStyle,
     title: 'MarkerLayer',
     visible: true,
-    opacity: 50,
+    opacity: 25,
 });
 
-export { SpotLayer, openStreetMapStandard, arcgisImagery, arcgisTopograph, arcgisStreetMap, markerLayer }
+const style = new Style({
+    fill: new Fill({
+        color: '#eeeeee',
+    }),
+});
+
+export { SpotLayer, OptionalSpotLayer, openStreetMapStandard, arcgisImagery, arcgisTopograph, arcgisStreetMap, markerLayer, warningWatch }
